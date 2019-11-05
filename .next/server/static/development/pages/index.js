@@ -3,6 +3,12 @@ module.exports =
 /******/ 	// The module cache
 /******/ 	var installedModules = require('../../../ssr-module-cache.js');
 /******/
+/******/ 	// object to store loaded chunks
+/******/ 	// "0" means "already loaded"
+/******/ 	var installedChunks = {
+/******/ 		"static\\development\\pages\\index.js": 0
+/******/ 	};
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/
@@ -33,6 +39,26 @@ module.exports =
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// require() chunk loading for javascript
+/******/
+/******/ 		// "0" is the signal for "already loaded"
+/******/ 		if(installedChunks[chunkId] !== 0) {
+/******/ 			var chunk = require("../../../" + ({}[chunkId]||chunkId) + ".js");
+/******/ 			var moreModules = chunk.modules, chunkIds = chunk.ids;
+/******/ 			for(var moduleId in moreModules) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 			for(var i = 0; i < chunkIds.length; i++)
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -85,6 +111,13 @@ module.exports =
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// uncaught error handler for webpack runtime
+/******/ 	__webpack_require__.oe = function(err) {
+/******/ 		process.nextTick(function() {
+/******/ 			throw err; // catch this error by using import().catch()
+/******/ 		});
+/******/ 	};
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -279,17 +312,71 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const Root = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.nav`
+  position: relative;
   font-family: "PT Serif", serif;
   padding: 2.5rem 1.5rem;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   background-color: #fff;
   z-index: 99999;
+
+  @media (max-width: 60rem) {
+    padding: 0.5rem 1rem;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 25%;
+    background: rgba(255, 255, 255, 0);
+    background: -moz-linear-gradient(
+      left,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.53) 53%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    background: -webkit-gradient(
+      left top,
+      right top,
+      color-stop(0%, rgba(255, 255, 255, 0)),
+      color-stop(53%, rgba(255, 255, 255, 0.53)),
+      color-stop(100%, rgba(255, 255, 255, 1))
+    );
+    background: -webkit-linear-gradient(
+      left,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.53) 53%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.53) 53%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=1 );
+  }
 `;
 const Inner = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.ul`
   display: flex;
+  flex-wrap: nowrap;
+
+  @media (max-width: 60rem) {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
-const InnerItem = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.li``;
+const InnerItem = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.li`
+  flex: 0 0 auto;
+`;
 const InnerLink = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.a`
   position: relative;
   display: block;
@@ -297,6 +384,11 @@ const InnerLink = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.a`
   color: #aaa;
   cursor: pointer;
   transition: 0.5s;
+
+  @media (max-width: 60rem) {
+    margin: 1rem 1rem;
+    padding: 0rem 0;
+  }
 
   &:hover {
     color: #111;
@@ -314,89 +406,89 @@ const InnerLink = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.a`
 const Navigation = () => __jsx(Root, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 43
+    lineNumber: 102
   },
   __self: undefined
 }, __jsx(Inner, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 44
+    lineNumber: 103
   },
   __self: undefined
 }, __jsx(InnerItem, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 45
+    lineNumber: 104
   },
   __self: undefined
 }, __jsx(_ActiveLink__WEBPACK_IMPORTED_MODULE_1__["default"], {
   href: "/",
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 46
+    lineNumber: 105
   },
   __self: undefined
 }, __jsx(InnerLink, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 47
+    lineNumber: 106
   },
   __self: undefined
 }, "Beranda"))), __jsx(InnerItem, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 50
+    lineNumber: 109
   },
   __self: undefined
 }, __jsx(_ActiveLink__WEBPACK_IMPORTED_MODULE_1__["default"], {
   href: "/tentang",
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 51
+    lineNumber: 110
   },
   __self: undefined
 }, __jsx(InnerLink, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 52
+    lineNumber: 111
   },
   __self: undefined
 }, "Tentang kami"))), __jsx(InnerItem, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 55
+    lineNumber: 114
   },
   __self: undefined
 }, __jsx(_ActiveLink__WEBPACK_IMPORTED_MODULE_1__["default"], {
   href: "/produk",
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 56
+    lineNumber: 115
   },
   __self: undefined
 }, __jsx(InnerLink, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 57
+    lineNumber: 116
   },
   __self: undefined
 }, "Produk"))), __jsx(InnerItem, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 60
+    lineNumber: 119
   },
   __self: undefined
 }, __jsx(_ActiveLink__WEBPACK_IMPORTED_MODULE_1__["default"], {
   href: "/pemesanan",
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 61
+    lineNumber: 120
   },
   __self: undefined
 }, __jsx(InnerLink, {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 62
+    lineNumber: 121
   },
   __self: undefined
 }, "Tata cara pemesanan")))));
@@ -537,10 +629,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var next_dynamic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/dynamic */ "next/dynamic");
+/* harmony import */ var next_dynamic__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_dynamic__WEBPACK_IMPORTED_MODULE_2__);
 var _jsxFileName = "C:\\Users\\Asus\\bandolbanyumas\\components\\products\\Post.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
+
+const LazyImage = next_dynamic__WEBPACK_IMPORTED_MODULE_2___default()(() => __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../utils/lazy-image */ "./components/utils/lazy-image.js")), {
+  ssr: false,
+  loadableGenerated: {
+    webpack: () => [/*require.resolve*/(/*! ../utils/lazy-image */ "./components/utils/lazy-image.js")],
+    modules: ["../utils/lazy-image"]
+  }
+});
 const Root = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.article`
   border-radius: 8px;
   overflow: hidden;
@@ -590,33 +692,34 @@ function Post({
   return __jsx(Root, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49
+      lineNumber: 52
     },
     __self: this
-  }, __jsx("img", {
-    alt: alt,
+  }, __jsx(LazyImage, {
+    srcset: media,
     src: media,
+    alt: alt,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 50
+      lineNumber: 53
     },
     __self: this
   }), __jsx(Text, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 51
+      lineNumber: 55
     },
     __self: this
   }, __jsx("h2", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 52
+      lineNumber: 56
     },
     __self: this
   }, title), description), __jsx(Button, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 55
+      lineNumber: 59
     },
     __self: this
   }, "Pesan sekarang"));
@@ -2494,6 +2597,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
  // CONTENTFUL_SPACE_ID=pwqt3c72vj9v
 // CONTENTFUL_ACCESS_TOKEN=mTty2H7ONePrpF8kxIfq0RjxMmrUp2CVBdiRMlqlVL0
+// space: process.env.SPACE_ID,
+// accessToken: process.env.ACCESS_TOKEN
 
 const client = __webpack_require__(/*! contentful */ "contentful").createClient({
   space: "pwqt3c72vj9v",
@@ -2526,6 +2631,19 @@ const Root = styled_components__WEBPACK_IMPORTED_MODULE_3___default.a.div`
     grid-template-columns: 1fr;
     grid-gap: 1.5rem;
   }
+`;
+const Error = styled_components__WEBPACK_IMPORTED_MODULE_3___default.a.div`
+  max-width: 90rem;
+  margin: auto;
+  padding: 2.5rem 1.8rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.05);
+
+  font-size: 2em;
+  font-weight: bold;
+  grid-column: 1/-1;
 `;
 
 function Home() {
@@ -2560,28 +2678,28 @@ function Home() {
   return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(_components_layout_Layout__WEBPACK_IMPORTED_MODULE_1__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 77
+      lineNumber: 94
     },
     __self: this
   }, __jsx(Header, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 78
+      lineNumber: 95
     },
     __self: this
   }, __jsx("h1", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 79
+      lineNumber: 96
     },
     __self: this
   }, "Bandol Banyumas"), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."), __jsx(Root, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83
+      lineNumber: 100
     },
     __self: this
-  }, posts.length > 0 ? posts.map(p => __jsx(_components_products_Post__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, posts.length > 0 ? posts.slice(0, 4).map(p => __jsx(_components_products_Post__WEBPACK_IMPORTED_MODULE_2__["default"], {
     alt: p.fields.alt,
     key: p.fields.title,
     media: p.fields.media.fields.file.url,
@@ -2589,10 +2707,16 @@ function Home() {
     description: p.fields.description,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 86
+      lineNumber: 105
     },
     __self: this
-  })) : null)));
+  })) : __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(Error, {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 115
+    },
+    __self: this
+  }, "Error showing the posts, please check your internet connection")))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
@@ -2736,6 +2860,17 @@ module.exports = require("core-js/library/fn/weak-map");
 
 /***/ }),
 
+/***/ "next/dynamic":
+/*!*******************************!*\
+  !*** external "next/dynamic" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/dynamic");
+
+/***/ }),
+
 /***/ "next/head":
 /*!****************************!*\
   !*** external "next/head" ***!
@@ -2832,6 +2967,17 @@ module.exports = require("styled-jsx/style");
 /***/ (function(module, exports) {
 
 module.exports = require("url");
+
+/***/ }),
+
+/***/ "vanilla-lazyload":
+/*!***********************************!*\
+  !*** external "vanilla-lazyload" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("vanilla-lazyload");
 
 /***/ })
 

@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import dynamic from "next/dynamic";
+
+const LazyImage = dynamic(() => import("../utils/lazy-image"), { ssr: false });
 
 const Root = styled.article`
   border-radius: 8px;
@@ -47,7 +50,8 @@ const Button = styled.a`
 function Post({ alt, description, media, title }) {
   return (
     <Root>
-      <img alt={alt} src={media} />
+      <LazyImage srcset={media} src={media} alt={alt} />
+      {/* <img alt={alt} loading="lazy" src={media} /> */}
       <Text>
         <h2>{title}</h2>
         {description}

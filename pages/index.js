@@ -9,9 +9,12 @@ import styled from "styled-components";
 // CONTENTFUL_SPACE_ID=pwqt3c72vj9v
 // CONTENTFUL_ACCESS_TOKEN=mTty2H7ONePrpF8kxIfq0RjxMmrUp2CVBdiRMlqlVL0
 
+// space: process.env.SPACE_ID,
+// accessToken: process.env.ACCESS_TOKEN
+
 const client = require("contentful").createClient({
-  space: process.env.SPACE_ID,
-  accessToken: process.env.ACCESS_TOKEN
+  space: "pwqt3c72vj9v",
+  accessToken: "mTty2H7ONePrpF8kxIfq0RjxMmrUp2CVBdiRMlqlVL0"
 });
 
 const Header = styled.header`
@@ -41,6 +44,20 @@ const Root = styled.div`
     grid-template-columns: 1fr;
     grid-gap: 1.5rem;
   }
+`;
+
+const Error = styled.div`
+  max-width: 90rem;
+  margin: auto;
+  padding: 2.5rem 1.8rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.05);
+
+  font-size: 2em;
+  font-weight: bold;
+  grid-column: 1/-1;
 `;
 
 function Home() {
@@ -81,8 +98,10 @@ function Home() {
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </Header>
         <Root>
-          {posts.length > 0
-            ? posts.map(p => (
+          {posts.length > 0 ? (
+            posts
+              .slice(0, 4)
+              .map(p => (
                 <Post
                   alt={p.fields.alt}
                   key={p.fields.title}
@@ -91,7 +110,13 @@ function Home() {
                   description={p.fields.description}
                 />
               ))
-            : null}
+          ) : (
+            <>
+              <Error>
+                Error showing the posts, please check your internet connection
+              </Error>
+            </>
+          )}
         </Root>
       </Layout>
     </>

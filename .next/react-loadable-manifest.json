@@ -1,4 +1,24 @@
 {
+  "../utils/lazy-image": [
+    {
+      "id": "./components/utils/config/lazyload.js",
+      "name": "./components/utils/config/lazyload.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./components/utils/lazy-image.js",
+      "name": "./components/utils/lazy-image.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/vanilla-lazyload/dist/lazyload.min.js",
+      "name": "./node_modules/vanilla-lazyload/dist/lazyload.min.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
   "./dev/noop": [
     {
       "id": "./node_modules/next/dist/client/dev/noop.js",
