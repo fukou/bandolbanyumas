@@ -25,8 +25,8 @@ const Root = styled.div`
 `;
 
 const client = require("contentful").createClient({
-  space: "pwqt3c72vj9v",
-  accessToken: "mTty2H7ONePrpF8kxIfq0RjxMmrUp2CVBdiRMlqlVL0"
+  space: process.env.SPACE_ID,
+  accessToken: process.env.ACCESS_TOKEN
 });
 
 function Produk() {
@@ -64,7 +64,7 @@ function Produk() {
                 <Post
                   alt={p.fields.alt}
                   key={p.fields.title}
-                  media={p.fields.media}
+                  media={p.fields.media.fields.file.url}
                   title={p.fields.title}
                   description={p.fields.description}
                 />
